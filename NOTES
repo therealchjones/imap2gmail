@@ -1,0 +1,28 @@
+result, data = IMAP.fetch('1:3','(UID RFC822.SIZE ENVELOPE)')
+yields [ b, b, b ] where each b is a message number followed by a
+parenthesized "string"
+result, data = IMAP.fetch('1:3','FAST')
+yields something similar, for the appropriate macro FAST
+result, data = IMAP.fetch('1','FAST')
+also a list of a single item that looks like a "string" (though binary)
+result, data = IMAP.fetch('1','RFC822')
+for some reason gives the [ (msg-number' ('partname' {'size?'}', body), ')' ]
+result, data = IMAP.fetch('1:2', 'RFC822')
+gives the similar '(a,b), c' complex tuple for each message as an entry in the single list
+but not separated, i.e., [ (a,b),c,(d,e),f]
+result, data = IMAP.fetch('1:2','INTERNALDATE')
+fetch: "Returned data are tuples of message part envelope and data."
+This appears to mean data, as on 
+http://jeromebelleman.gitlab.io/posts/productivity/mailcli/,
+is a list of alternating:
+( ( msg-number-and-name-of-part, msg-part ), closing-paren )
+for the above, the format is:
+[ ( b"messageUID (INTERNALDATE quotedInternalDate RFC822.SIZE messageSize RFC822 {someOtherNumber}" , messageBytes), b')' ]
+
+limitations: no SMTP envelope information to destination?
+
+There is no support for IMAP without TLS (theoretically trivial to add, but
+I have no use for it)
+
+Set necessary parameters at the top of the script, with sensible defaults
+for not set when possible.
