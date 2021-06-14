@@ -120,6 +120,8 @@ destConnected = False
 source = imaplib.IMAP4_SSL(sourceServer, sourcePort)
 result = source.login(sourceAccount, sourcePassword)
 for (sourceMailbox, destMailbox) in mailboxes:
+    result = source.select(sourceMailbox)
+    result = source.expunge()
     result, [numMessages] = source.select(sourceMailbox)
     if numMessages != b'0':
         if not destConnected:
@@ -196,7 +198,7 @@ for (sourceMailbox, destMailbox) in mailboxes:
                       '/' + sourceMailbox, file=sys.stderr)
                 print(' to ' + destAccount + '@' + destServer +
                       '/' + destMailbox, file=sys.stderr)
-                print(' (' + str(exception) + ')')
+                print(' (' + str(exception) + ')', file=sys.stderr)
 
                 if (sourceMailbox != sourceErrorMailbox) & (errorBehavior == 'move'):
                     result = source.uid('copy', msgUid, sourceErrorMailbox)
