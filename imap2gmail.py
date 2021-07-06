@@ -202,7 +202,7 @@ for (sourceMailbox, destMailbox) in mailboxes:
 
                 if (sourceMailbox != sourceErrorMailbox) & (errorBehavior == 'move'):
                     result = source.uid('copy', msgUid, sourceErrorMailbox)
-                    if result[0] == b'OK':
+                    if result[0] == 'OK':
                         print(' Moved it to ' + sourceAccount + '@' + sourceServer +
                               '/' + sourceErrorMailbox + ' instead.', file=sys.stderr)
                         source.uid('store', msgUid, '+FLAGS', '\\Deleted')
